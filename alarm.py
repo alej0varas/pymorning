@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from random import choice, randint
 
 
-VOLUME_INCREMENT_RATE = 60 / 30   # in seconds
+VOLUME_INCREMENT_RATE = 60  # in seconds
 VOLUME_INCREMENT = 5  # as a percentage
 VOLUME_MAX_VALUE = 100  # as a percentage
 VOLUME_INCREMENT_COMMAND = 'pactl set-sink-volume 1 +%s%%' % VOLUME_INCREMENT
