@@ -11,14 +11,14 @@ from random import choice, randint
 
 
 DEFAULT_DELTA_MINUTES = 10
+DEFAULT_SLEEPTIME_HOURS = 6
+DEFAULT_SLEEPTIME_MINUTES = 0
 VOLUME_INCREMENT_RATE = 60  # in seconds
 VOLUME_INCREMENT = 5  # as a percentage
 VOLUME_MAX_VALUE = 100  # as a percentage
 VOLUME_INCREMENT_COMMAND = 'pactl set-sink-volume 1 +%s%%' % VOLUME_INCREMENT
 VOLUME_TO_MINIMUM_COMMAND = 'pactl set-sink-volume 1 0%'
-
 REFRESH_RATE = 60  # in seconds
-
 MACRO_FILE_PATH = 'autoplay-spotify.cnee'
 ALARM_COMMAND = '/usr/bin/cnee --replay -f %s' % MACRO_FILE_PATH
 
@@ -51,7 +51,7 @@ def main(sleep_time_hours, sleep_time_minutes, delta):
 
 
 if __name__ == "__main__":
-    sleep_time_hours, sleep_time_minutes, delta = 6, 0, DEFAULT_DELTA_MINUTES
+    sleep_time_hours, sleep_time_minutes, delta = DEFAULT_SLEEPTIME_HOURS, DEFAULT_SLEEPTIME_MINUTES, DEFAULT_DELTA_MINUTES
     if len(sys.argv) > 1:
         sleep_time_hours = int(sys.argv[1])
     if len(sys.argv) > 2:
