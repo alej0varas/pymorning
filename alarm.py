@@ -45,7 +45,7 @@ def main(sleep_time_hours, sleep_time_minutes, delta):
 
     popen2.popen3(ALARM_COMMAND)
 
-    for i in range(0, VOLUME_MAX_VALUE / VOLUME_INCREMENT_RATE):
+    for i in range(0, VOLUME_MAX_VALUE / VOLUME_INCREMENT):
         time.sleep(VOLUME_INCREMENT_RATE)
         popen2.popen3(VOLUME_INCREMENT_COMMAND)
 
