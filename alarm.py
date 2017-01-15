@@ -24,7 +24,7 @@ REFRESH_RATE = 60  # in seconds
 ALARM_COMMAND = 'python3 cli.py'
 
 
-def main(sleep_time_hours, sleep_time_minutes, delta, alarm_command=ALARM_COMMAND):
+def main(sleep_time_hours, sleep_time_minutes, delta, alarm_command):
     sys.stdout.write('%s\n' % alarm_command)
     random_delta = randint(0, delta * 60) * choice((-1, 1))
     sleep_time = sleep_time_hours * 60 * 60 + sleep_time_minutes * 60 + delta
@@ -60,6 +60,7 @@ if __name__ == "__main__":
         sleep_time_minutes = int(sys.argv[2])
     if len(sys.argv) > 3:
         delta = int(sys.argv[3])
+    alarm_command = ALARM_COMMAND
     if len(sys.argv) > 4:
         alarm_command = ' '.join(sys.argv[4:])
     main(sleep_time_hours, sleep_time_minutes, delta, alarm_command)
