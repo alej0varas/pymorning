@@ -3,7 +3,7 @@
 # Run a command after `hours`[6] and `minutes`[0] +/- a random delta
 # to be used as an alarm clock.
 
-import popen2
+import subprocess
 import sys
 import time
 from datetime import datetime, timedelta
@@ -16,8 +16,8 @@ DEFAULT_SLEEPTIME_MINUTES = 0
 VOLUME_INCREMENT_RATE = 60  # in seconds
 VOLUME_INCREMENT = 5  # as a percentage
 VOLUME_MAX_VALUE = 100  # as a percentage
-VOLUME_INCREMENT_COMMAND = 'pactl set-sink-volume 1 +%s%%' % VOLUME_INCREMENT
-VOLUME_TO_MINIMUM_COMMAND = 'pactl set-sink-volume 1 0%'
+VOLUME_INCREMENT_COMMAND = ['pactl', 'set-sink-volume', '1', '+%s%%' % VOLUME_INCREMENT]
+VOLUME_TO_MINIMUM_COMMAND = ['pactl', 'set-sink-volume', '1', '0%']
 REFRESH_RATE = 60  # in seconds
 # MACRO_FILE_PATH = 'autoplay-spotify.cnee'
 # ALARM_COMMAND = '/usr/bin/cnee --replay -f %s' % MACRO_FILE_PATH
@@ -32,7 +32,7 @@ def main(sleep_time_hours, sleep_time_minutes, delta, alarm_command):
     # It can be done with this two lines only but the following is
     # more fancy
     # time.sleep(sleep_time)
-    # popen2.popen3(ALARM_COMMAND)
+    # subprocess.popen3(ALARM_COMMAND)
 
     sleep_time_delta = timedelta(0, sleep_time)
     alarm = datetime.now() + sleep_time_delta
@@ -43,13 +43,14 @@ def main(sleep_time_hours, sleep_time_minutes, delta, alarm_command):
         sys.stdout.write('%s\n' % str(sleep_time))
         time.sleep(REFRESH_RATE)
 
-    popen2.popen3(VOLUME_TO_MINIMUM_COMMAND)
+    sys.stdout.write('%s\n' % ' '.join(VOLUME_TO_MINIMUM_COMMAND))
+    subprocess.Popen(VOLUME_TO_MINIMUM_COMMAND)
 
-    popen2.popen3(alarm_command)
+    p = subprocess.Popen(alarm_command)
 
-    for i in range(0, VOLUME_MAX_VALUE / VOLUME_INCREMENT):
+    for i in range(0, VOLUME_MAX_VALUE // VOLUME_INCREMENT):
         time.sleep(VOLUME_INCREMENT_RATE)
-        popen2.popen3(VOLUME_INCREMENT_COMMAND)
+        subprocess.Popen(VOLUME_INCREMENT_COMMAND)
 
 
 if __name__ == "__main__":
@@ -62,5 +63,5 @@ if __name__ == "__main__":
         delta = int(sys.argv[3])
     alarm_command = ALARM_COMMAND
     if len(sys.argv) > 4:
-        alarm_command = ' '.join(sys.argv[4:])
+        alarm_command = sys.argv[4:]
     main(sleep_time_hours, sleep_time_minutes, delta, alarm_command)
