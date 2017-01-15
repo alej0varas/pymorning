@@ -11,7 +11,7 @@ from random import choice, randint
 
 
 DEFAULT_DELTA_MINUTES = 10
-DEFAULT_SLEEPTIME_HOURS = 6
+DEFAULT_SLEEPTIME_HOURS = 5
 DEFAULT_SLEEPTIME_MINUTES = 0
 VOLUME_INCREMENT_RATE = 60  # in seconds
 VOLUME_INCREMENT = 5  # as a percentage
@@ -19,11 +19,13 @@ VOLUME_MAX_VALUE = 100  # as a percentage
 VOLUME_INCREMENT_COMMAND = 'pactl set-sink-volume 1 +%s%%' % VOLUME_INCREMENT
 VOLUME_TO_MINIMUM_COMMAND = 'pactl set-sink-volume 1 0%'
 REFRESH_RATE = 60  # in seconds
-MACRO_FILE_PATH = 'autoplay-spotify.cnee'
-ALARM_COMMAND = '/usr/bin/cnee --replay -f %s' % MACRO_FILE_PATH
+# MACRO_FILE_PATH = 'autoplay-spotify.cnee'
+# ALARM_COMMAND = '/usr/bin/cnee --replay -f %s' % MACRO_FILE_PATH
+ALARM_COMMAND = 'python3 cli.py'
 
 
-def main(sleep_time_hours, sleep_time_minutes, delta):
+def main(sleep_time_hours, sleep_time_minutes, delta, alarm_command=ALARM_COMMAND):
+    sys.stdout.write('%s\n' % alarm_command)
     random_delta = randint(0, delta * 60) * choice((-1, 1))
     sleep_time = sleep_time_hours * 60 * 60 + sleep_time_minutes * 60 + delta
 
@@ -43,7 +45,7 @@ def main(sleep_time_hours, sleep_time_minutes, delta):
 
     popen2.popen3(VOLUME_TO_MINIMUM_COMMAND)
 
-    popen2.popen3(ALARM_COMMAND)
+    popen2.popen3(alarm_command)
 
     for i in range(0, VOLUME_MAX_VALUE / VOLUME_INCREMENT):
         time.sleep(VOLUME_INCREMENT_RATE)
@@ -58,4 +60,6 @@ if __name__ == "__main__":
         sleep_time_minutes = int(sys.argv[2])
     if len(sys.argv) > 3:
         delta = int(sys.argv[3])
-    main(sleep_time_hours, sleep_time_minutes, delta)
+    if len(sys.argv) > 4:
+        alarm_command = ' '.join(sys.argv[4:])
+    main(sleep_time_hours, sleep_time_minutes, delta, alarm_command)

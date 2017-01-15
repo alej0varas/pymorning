@@ -1,11 +1,9 @@
 Pymorning
 =========
 
-Having spotify in one window change to a terminal with Alt + Tab and run.
+F*ck Spotify(but still can be used). You can specify your own command.
 
-  $ python alarm.py
-
-The macro runs "Alt + Tab" then "Space".
+  $ python alarm.py 6 30 0 python fmap.py
 
 You can specify hours and minutes for the time you want to sleep like.
 
